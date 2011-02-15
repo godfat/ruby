@@ -76,7 +76,7 @@ module Psych
         end
 
         if target.respond_to?(:to_yaml)
-          loc = target.method(:to_yaml).source_location.first
+          loc = target.public_method(:to_yaml).source_location.first
           if loc !~ /(syck\/rubytypes.rb|psych\/core_ext.rb)/
             unless target.respond_to?(:encode_with)
               if $VERBOSE
@@ -297,7 +297,7 @@ module Psych
 
       # FIXME: remove this method once "to_yaml_properties" is removed
       def find_ivars target
-        loc = target.method(:to_yaml_properties).source_location.first
+        loc = target.public_method(:to_yaml_properties).source_location.first
         unless loc.start_with?(Psych::DEPRECATED) || loc.end_with?('rubytypes.rb')
           if $VERBOSE
             warn "#{loc}: to_yaml_properties is deprecated, please implement \"encode_with(coder)\""
