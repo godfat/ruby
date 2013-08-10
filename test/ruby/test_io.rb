@@ -857,6 +857,23 @@ class TestIO < Test::Unit::TestCase
     }
   end
 
+  def test_copy_stream_to_obj_with_to_path_in_binmode
+    mkcdtmpdir {
+      EnvUtil.with_default_internal(Encoding::UTF_8) do
+        # StringIO to object with to_path
+        bytes = "\xDE\xAD\xBE\xEF".force_encoding(Encoding::ASCII_8BIT)
+        src = StringIO.new(bytes)
+        dst = Object.new
+        def dst.to_path
+          "qux"
+        end
+        IO.copy_stream(src, dst)
+        assert_equal(bytes, File.binread("qux"))
+        assert_equal(4, src.pos)
+      end
+    }
+  end
+
   class Rot13IO
     def initialize(io)
       @io = io

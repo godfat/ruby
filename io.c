@@ -10172,6 +10172,7 @@ copy_stream_body(VALUE arg)
             args[1] = INT2NUM(oflags);
             args[2] = INT2FIX(0666);
             dst_io = rb_class_new_instance(3, args, rb_cFile);
+            rb_io_binmode_m(dst_io);
             stp->dst = dst_io;
             stp->close_dst = 1;
         }
